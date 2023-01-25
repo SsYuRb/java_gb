@@ -1,4 +1,3 @@
-package java_gb;
 
 /**
  * intro_java

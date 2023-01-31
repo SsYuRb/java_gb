@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-import org.w3c.dom.UserDataHandler;
-
 /**
  * HW2
  */
@@ -20,10 +18,9 @@ public class HW2 {
         Scanner sc = new Scanner(fr);
         int a = 1;
         while (sc.hasNextLine()){
-            if (sc.next()==" "); 
+            if (sc.next()==" "); // Не знаю почему, но без этого условия не работает.
                 ll.add(sc.nextInt());
         } 
-        
         if (ll.get(0) == 0){
             System.out.println(1);
         } else {

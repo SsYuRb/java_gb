@@ -3,6 +3,7 @@
 package HW2;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -31,5 +32,9 @@ public class HW2 {
         }
         fr.close();
         sc.close();
+        FileWriter fw = new FileWriter("/Users/estaban/Desktop/Прогерство/java_gb/HW2/outptu.txt");
+        String sdf = Double.toString(a);
+        fw.write(sdf);
+        fw.close();
     }
 }

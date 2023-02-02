@@ -11,56 +11,53 @@ public class HW4 {
     public static int x;
     public static int y;
     public static Scanner scanner = new Scanner(System.in);
-    public static Queue<Integer[]> queueNum = new LinkedList<Integer[]>();
     public static Integer[] XYQ = new Integer[2];
     public static void main(String[] args) {
         int[][] arr = new int[5][5];
         InitPosition();
         arr[x][y] = 1;
-        arr = BuildTheWall(arr);
-        arr = MakeExit(arr);
-        arr = FindAWay(arr);
-        System.out.println(x);
-        System.out.println(y);
-        System.out.println(arr[x][y]);
-        System.out.println(arr[x-1][y]);
-        System.out.println(arr[x][y+1]);
-        System.out.println(arr[x+1][y]);
-        System.out.println(arr[x][y-1]);
-    }
-    public static int[][] FindAWay(int[][] Arr) {
-        while (Arr[x][y] != -2) {
-            if (x != 0) {
-                if (Arr[x - 1][y] == 0) {
-                    Arr[x - 1][y] = Arr[x][y] + 1;
-                    XYQ = new Integer[] { x - 1, y };
-                    queueNum.add(XYQ);
-                }
+        int[][] arrayWithWall = BuildTheWall(arr);
+        int[][] arrayWithExit = MakeExit(arrayWithWall);
+        int[][] arrayWithRoad = FindAWay(arrayWithExit);
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                System.out.print(arrayWithRoad[i][j]);
             }
-            if (y != 4) {
-                if (Arr[x][y + 1] == 0) {
-                    Arr[x][y + 1] = Arr[x][y] + 1;
-                    XYQ = new Integer[] { x, y + 1 };
-                    queueNum.add(XYQ);
-                }
-            }
-            if (x != 4) {
-                if ((Arr[x + 1][y] == 0)) {
-                    Arr[x + 1][y] = Arr[x][y] + 1;
-                    XYQ = new Integer[] { x + 1, y };
-                    queueNum.add(XYQ);
-                }
-            }
-            if (y != 0) {
-                if ((Arr[x][y - 1] == 0)) {
-                    Arr[x][y - 1] = Arr[x][y] + 1;
-                    XYQ = new Integer[] { x, y - 1 };
-                    queueNum.add(XYQ);
-                }
-            }
-            XYdinamic();
+            System.out.println("\n");
         }
-        return Arr;
+    }
+    public static int[][] FindAWay (int[][] arr) {
+        Queue<int[]> queueNum = new LinkedList<int[]>();
+        while ((x != 4) && (y != 4)) {
+            if((x!=0)&&(arr[x-1][y] != -1)){
+                arr[x-1][y] = arr[x][y] + 1;
+                int[] kmn = new int[] {(x-1), y};
+                queueNum.add(kmn);
+            }
+            
+            if((y!=4)&&(arr[x][y+1]!=-1)){
+                arr[x][y+1]=arr[x][y]+1;
+                int[] kmn = new int[] {x, (y+1)};
+                queueNum.add(kmn);
+            }
+
+            if((x!=4)&&(arr[x+1][y]!=4)){
+                arr[x+1][y] = arr[x][y] + 1;
+                int[] kmn = new int[] {(x+1), y};
+                queueNum.add(kmn);
+            }
+
+            if((y!=0)&&(arr[x][y-1]!=-1)){
+                arr[x][y-1] = arr[x][y] + 1;
+                int[] kmn = new int[] {x, (y-1)};
+                queueNum.add(kmn);
+            }
+
+            int[] khm = queueNum.poll();
+            x = khm[0];
+            y = khm[1];
+        }
+        return arr;
     }
     public static void InitPosition() {
         System.out.println("Введите начальную позицию: ");
@@ -93,10 +90,5 @@ public class HW4 {
         int yExit = scanner.nextInt();
         Arr[xExit][yExit] = -2;
         return Arr;
-    }
-    public static void XYdinamic() {
-        Integer[] xy = queueNum.poll();
-        x = xy[0];
-        y = xy[1];
     }
 }

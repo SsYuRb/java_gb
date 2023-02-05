@@ -4,100 +4,137 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
-/**
- * HW4
- */
 public class proba {
     public static int x;
     public static int y;
+    public static int initX;
+    public static int initY;
     public static Scanner scanner = new Scanner(System.in);
     public static Queue<Integer[]> queueNum = new LinkedList<Integer[]>();
     public static Integer[] XYQ = new Integer[2];
+    public static Integer[] exiter = new Integer[2];
+
     public static void main(String[] args) {
         int[][] arr = new int[5][5];
-        InitPosition();
+        initPosition();
         arr[x][y] = 1;
-        int[][] arrayWithWall = BuildTheWall(arr);
-        int[][] arrayWithExit = MakeExit(arrayWithWall);
-        int[][] arrayWithRoad = FindAWay(arrayWithExit);
+        int[][] arrayWithWall = buildTheWall(arr);
+        int[][] arrayWithExit = makeExit(arrayWithWall);
+        int[][] arrayWithRoad = findAWay(arrayWithExit);
+        scanner.close();
+        System.out.println("The array of roads");
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 System.out.print(arrayWithRoad[i][j]);
             }
             System.out.println("\n");
         }
+        // System.out.println(x);
+        // System.out.println(y);
+        int[][] arrayWithTheRoad = ShortWay(arrayWithRoad);
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                System.out.print(arrayWithTheRoad[i][j]);
+            }
+            System.out.println("\n");
+        }
     }
-    public static int[][] FindAWay(int[][] Arr) {
-        while (Arr[x][y] != -2) {
+
+    public static int[][] findAWay(int[][] arr) {
+        while ((x != 4) || (y != 4)) {
             if (x != 0) {
-                if (Arr[x - 1][y] == 0) {
-                    Arr[x - 1][y] = Arr[x][y] + 1;
+                if (arr[x - 1][y] == 0) {
+                    arr[x - 1][y] = arr[x][y] + 1;
                     XYQ = new Integer[] { x - 1, y };
                     queueNum.add(XYQ);
                 }
             }
             if (y != 4) {
-                if (Arr[x][y + 1] == 0) {
-                    Arr[x][y + 1] = Arr[x][y] + 1;
+                if (arr[x][y + 1] == 0) {
+                    arr[x][y + 1] = arr[x][y] + 1;
                     XYQ = new Integer[] { x, y + 1 };
                     queueNum.add(XYQ);
                 }
             }
             if (x != 4) {
-                if ((Arr[x + 1][y] == 0)) {
-                    Arr[x + 1][y] = Arr[x][y] + 1;
+                if ((arr[x + 1][y] == 0)) {
+                    arr[x + 1][y] = arr[x][y] + 1;
                     XYQ = new Integer[] { x + 1, y };
                     queueNum.add(XYQ);
                 }
             }
             if (y != 0) {
-                if ((Arr[x][y - 1] == 0)) {
-                    Arr[x][y - 1] = Arr[x][y] + 1;
+                if ((arr[x][y - 1] == 0)) {
+                    arr[x][y - 1] = arr[x][y] + 1;
                     XYQ = new Integer[] { x, y - 1 };
                     queueNum.add(XYQ);
                 }
             }
-            XYdinamic();
+            xyDinamic();
         }
-        return Arr;
+        return arr;
     }
-    public static void InitPosition() {
-        System.out.println("Введите начальную позицию: ");
+
+    public static void initPosition() {
+        System.out.println("Enter starting position: ");
         x = scanner.nextInt();
         y = scanner.nextInt();
+        initX = x;
+        initY = y;
     }
-    public static int VallMakerPosX() {
-        System.out.print("Введите ряд стены: ");
-        int valX = scanner.nextInt();
-        return valX;
+
+    public static int wallMakerPosX() {
+        System.out.print("Enter X-coordinate for wall: ");
+        return scanner.nextInt();
     }
-    public static int VallMakerPosY() {
-        System.out.print("Введите столбец стены: ");
-        int valY = scanner.nextInt();
-        return valY;
+
+    public static int wallMakerPosY() {
+        System.out.print("Enter Y-coordinate for wall: ");
+        return scanner.nextInt();
     }
-    public static int[][] BuildTheWall(int[][] Arr) {
-        System.out.print("Сколько стен вы хотите построить: ");
-        int countVals = scanner.nextInt();
-        for (int i = 0; i < countVals; i++) {
-            int posX = VallMakerPosX();
-            int posY = VallMakerPosY();
-            Arr[posX][posY] = -1;
+
+    public static int[][] buildTheWall(int[][] arr) {
+        System.out.println("Enter number of walls: ");
+        int numWalls = scanner.nextInt();
+        for (int i = 0; i < numWalls; i++) {
+            int wallX = wallMakerPosX();
+            int wallY = wallMakerPosY();
+            arr[wallX][wallY] = -1;
         }
-        return Arr;
+        return arr;
     }
-    public static int[][] MakeExit(int[][] Arr) {
-        System.out.println("Где будет выход: ");
-        int xExit = scanner.nextInt();
-        int yExit = scanner.nextInt();
-        Arr[xExit][yExit] = -2;
-        return Arr;
+
+    public static int[][] makeExit(int[][] arr) {
+        System.out.println("Enter exit coordinates: ");
+        int exitX = scanner.nextInt();
+        int exitY = scanner.nextInt();
+        arr[exitX][exitY] = -2;
+        exiter = new Integer[] { exitX, exitY };
+        return arr;
     }
-    public static void XYdinamic() {
-        Integer[] xy = queueNum.poll();
-        if (xy != null) {
-            x = xy[0];
-            y = xy[1];
+
+    public static void xyDinamic() {
+        if (!queueNum.isEmpty()) {
+            XYQ = queueNum.poll();
+            x = XYQ[0];
+            y = XYQ[1];
         }
+    }
+
+    public static int[][] ShortWay(int[][] arr) {
+        int x = initX, y = initY;
+        while (arr[x][y] != 1) {
+            if (x != 0 && arr[x - 1][y] == arr[x][y] - 1) {
+                x = x - 1;
+            } else if (y != 4 && arr[x][y + 1] == arr[x][y] - 1) {
+                y = y + 1;
+            } else if (x != 4 && arr[x + 1][y] == arr[x][y] - 1) {
+                x = x + 1;
+            } else if (y != 0 && arr[x][y - 1] == arr[x][y] - 1) {
+                y = y - 1;
+            }
+            arr[x][y] = 9;
+        }
+        return arr;
     }
 }
